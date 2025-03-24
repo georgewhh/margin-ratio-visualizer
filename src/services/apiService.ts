@@ -60,36 +60,7 @@ export const fetchMarginRatioData = async (days: number = 200): Promise<MarginRa
       variant: "destructive",
     });
     
-    // Return mock data for development/preview purposes
-    return generateMockData(days);
+    // Return empty array instead of mock data
+    return [];
   }
-};
-
-/**
- * Generates mock data for development purposes
- * @param days Number of days to generate
- * @returns Array of mock data points
- */
-const generateMockData = (days: number): MarginRatioDataPoint[] => {
-  const data: MarginRatioDataPoint[] = [];
-  const today = new Date();
-  let baseValue = 2.5 + Math.random();
-
-  for (let i = days; i > 0; i--) {
-    const date = new Date(today);
-    date.setDate(date.getDate() - i);
-    
-    // Generate a somewhat realistic looking trend
-    baseValue += (Math.random() - 0.5) * 0.1;
-    if (baseValue < 1) baseValue = 1 + Math.random() * 0.5;
-    if (baseValue > 5) baseValue = 5 - Math.random() * 0.5;
-    
-    data.push({
-      date: date.toISOString().split('T')[0],
-      value: parseFloat(baseValue.toFixed(2)),
-      securityName: "上证指数",
-    });
-  }
-
-  return data;
 };
