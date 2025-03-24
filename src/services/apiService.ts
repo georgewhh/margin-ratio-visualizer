@@ -9,10 +9,13 @@ export interface MarginRatioDataPoint {
 
 interface ApiResponse {
   data: {
-    list: Array<{
-      security_name: string;
-      rzrq_margin_trading_bal_flow_value_rate: number;
-      timestamp: number;
+    items: Array<{
+      item: {
+        "48:883957": {
+          rzrq_margin_trading_bal_flow_value_rate: number;
+        };
+      };
+      trade_date: string;
     }>;
   };
 }
@@ -24,19 +27,34 @@ interface ApiResponse {
  */
 export const fetchMarginRatioData = async (days: number = 200): Promise<MarginRatioDataPoint[]> => {
   try {
-    const response = await fetch("https://dq.10jqka.com.cn/fuyao/rzrq_data/default/v1/fetch_data", {
+    // Get current date in YYYYMMDD format for the 'end' parameter
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const endDate = `${year}${month}${day}`;
+    
+    const response = await fetch("https://dataq.10jqka.com.cn/fetch-data-server/fetch/v1/interval_data", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        codeSelectors: '{\n "include": [\n {\n "type": "block_code",\n "values": [\n "1B"\n ]\n }\n ]\n}',
-        indexInfo: '[{"index_id":"security_name"},{"index_id":"rzrq_margin_trading_bal_flow_value_rate","attribute":{},"timestamp":0,"time_type":"SNAPSHOT"}]',
-        appId: "tangram-data-view-stocklist",
-        columnMap: '{"rzrq_margin_trading_bal_flow_value_rate":{"title":"融资融券余额占流通市值比","sortBy":true,"fit":true}}',
-        page: `{size:${days}}`,
-        sort: "{}",
-        fixed: "20"
+        time_range: {
+          time_type: "TRADE_DAILY",
+          end: endDate,
+          offset: `-${days}`
+        },
+        indexes: [
+          {
+            codes: ["48:883957"],
+            index_info: [
+              {
+                index_id: "rzrq_margin_trading_bal_flow_value_rate"
+              }
+            ]
+          }
+        ]
       })
     });
 
@@ -47,11 +65,13 @@ export const fetchMarginRatioData = async (days: number = 200): Promise<MarginRa
     const result = await response.json() as ApiResponse;
     
     // Transform the API response to our data format
-    return result.data.list.map(item => ({
-      date: new Date(item.timestamp).toISOString().split('T')[0],
-      value: Number(item.rzrq_margin_trading_bal_flow_value_rate),
-      securityName: item.security_name
+    const transformedData = result.data.items.map(item => ({
+      date: formatTradeDate(item.trade_date),
+      value: Number(item.item["48:883957"].rzrq_margin_trading_bal_flow_value_rate),
+      securityName: "融资融券余额占流通市值比" // Since we don't get security name from the new API
     })).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    
+    return transformedData;
   } catch (error) {
     console.error("Error fetching margin ratio data:", error);
     toast({
@@ -60,7 +80,22 @@ export const fetchMarginRatioData = async (days: number = 200): Promise<MarginRa
       variant: "destructive",
     });
     
-    // Return empty array instead of mock data
+    // Return empty array on error
     return [];
   }
+};
+
+/**
+ * Formats trade date from YYYYMMDD to YYYY-MM-DD format
+ * @param tradeDate Trade date in YYYYMMDD format
+ * @returns Formatted date string in YYYY-MM-DD format
+ */
+const formatTradeDate = (tradeDate: string): string => {
+  if (tradeDate.length !== 8) return tradeDate;
+  
+  const year = tradeDate.substring(0, 4);
+  const month = tradeDate.substring(4, 6);
+  const day = tradeDate.substring(6, 8);
+  
+  return `${year}-${month}-${day}`;
 };
