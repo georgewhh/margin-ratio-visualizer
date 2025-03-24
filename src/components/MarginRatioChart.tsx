@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import {
   LineChart,
@@ -103,7 +104,7 @@ const MarginRatioChart: React.FC = () => {
   const { avg, min, max } = calculateStats();
 
   return (
-    <Card className="w-full h-full glass-card animate-scale-in">
+    <Card className="w-full h-full border-none bg-transparent animate-scale-in">
       <CardHeader className="pb-2">
         <div className="flex flex-col space-y-1">
           <div className="flex items-center justify-between">
@@ -168,16 +169,16 @@ const MarginRatioChart: React.FC = () => {
                     tickMargin={10}
                     minTickGap={50}
                     tick={{ fontSize: 12 }}
-                    axisLine={{ stroke: '#E5E7EB' }}
-                    tickLine={{ stroke: '#E5E7EB' }}
+                    axisLine={{ stroke: 'var(--border)' }}
+                    tickLine={{ stroke: 'var(--border)' }}
                   />
                   <YAxis 
                     tickFormatter={formatYAxis} 
                     tickMargin={10}
                     domain={['auto', 'auto']}
                     tick={{ fontSize: 12 }}
-                    axisLine={{ stroke: '#E5E7EB' }}
-                    tickLine={{ stroke: '#E5E7EB' }}
+                    axisLine={{ stroke: 'var(--border)' }}
+                    tickLine={{ stroke: 'var(--border)' }}
                   />
                   <Tooltip 
                     content={<ChartTooltip data={displayData} />}
@@ -192,7 +193,7 @@ const MarginRatioChart: React.FC = () => {
                     <text
                       x={60}
                       y={-5}
-                      fill="#6B7280"
+                      fill="var(--muted-foreground)"
                       textAnchor="middle"
                       fontSize={10}
                     >
@@ -209,7 +210,7 @@ const MarginRatioChart: React.FC = () => {
                       r: 6, 
                       stroke: "#F0BE83", 
                       strokeWidth: 2,
-                      fill: "#FFFFFF"
+                      fill: "var(--card)"
                     }}
                     isAnimationActive={true}
                     animationDuration={1500}

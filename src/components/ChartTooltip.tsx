@@ -28,10 +28,7 @@ const ChartTooltip: React.FC<ChartTooltipProps> = ({ active, payload, label, dat
       <div className="font-medium text-xs text-muted-foreground mb-1">
         {date}
       </div>
-      <div className="font-semibold mb-1 text-sm">
-        {dataPoint.securityName}
-      </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 mt-1">
         <div className="w-3 h-3 rounded-full bg-chart-gold" />
         <div className="text-sm">
           <span className="font-medium">两融余额占流通市值比: </span>
