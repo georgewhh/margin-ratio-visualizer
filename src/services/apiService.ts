@@ -29,7 +29,11 @@ export const fetchMarginRatioData = async (days: number = 200): Promise<MarginRa
   try {
     // Get current date and convert to timestamp for the 'end' parameter
     const now = new Date();
-    const timestamp = Math.floor(now.getTime() / 1000); // Convert to seconds timestamp
+    const endTimestamp = Math.floor(now.getTime() / 1000); // Convert to seconds timestamp
+    
+    // Calculate start timestamp (approximate based on days)
+    // Using a rough estimate of 86400 seconds per day
+    const startTimestamp = endTimestamp - (days * 86400); 
     
     const response = await fetch("https://dataq.10jqka.com.cn/fetch-data-server/fetch/v1/interval_data", {
       method: "POST",
@@ -41,8 +45,8 @@ export const fetchMarginRatioData = async (days: number = 200): Promise<MarginRa
       body: JSON.stringify({
         time_range: {
           time_type: "TRADE_DAILY",
-          end: timestamp.toString(),
-          offset: `-${days}`
+          start: startTimestamp.toString(),
+          end: endTimestamp.toString()
         },
         indexes: [
           {
