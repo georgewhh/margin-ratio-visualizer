@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from "react";
 
 interface TimeRangeSelectorProps {
@@ -93,7 +92,7 @@ const TimeRangeSelector: React.FC<TimeRangeSelectorProps> = ({
 
   return (
     <div 
-      className="range-selector mt-2" 
+      className="range-selector mt-2 relative" 
       ref={containerRef}
       onMouseDown={(e) => {
         const position = getPosition(e.clientX);

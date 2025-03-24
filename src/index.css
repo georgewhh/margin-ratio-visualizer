@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -161,20 +162,23 @@
 
 /* Range selector styles */
 .range-selector {
-  @apply relative h-8 bg-muted rounded-lg overflow-hidden cursor-pointer;
+  @apply relative h-8 bg-muted rounded-lg overflow-visible cursor-pointer;
 }
 
 .range-selector-handle {
   @apply absolute top-0 bottom-0 w-2 bg-muted-foreground/60 hover:bg-muted-foreground cursor-col-resize transition-colors duration-200;
   z-index: 10;
+  transform: translateX(-50%);
 }
 
 .left-handle {
   @apply rounded-l-lg;
+  transform: translateX(0%);
 }
 
 .right-handle {
   @apply rounded-r-lg;
+  transform: translateX(-100%);
 }
 
 .range-selector-selected {
