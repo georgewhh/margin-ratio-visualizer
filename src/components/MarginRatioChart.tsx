@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import {
   LineChart,
@@ -25,21 +24,18 @@ const MarginRatioChart: React.FC = () => {
   const [animatedLine, setAnimatedLine] = useState<boolean>(false);
   const chartContainerRef = useRef<HTMLDivElement>(null);
 
-  // Fetch data on component mount
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
       const data = await fetchMarginRatioData(200);
       setAllData(data);
       
-      // Initialize with full range
       const initialRange: [number, number] = [0, data.length - 1];
       setTimeRange(initialRange);
       setDisplayData(data);
       
       setLoading(false);
       
-      // Animate the line after a small delay
       setTimeout(() => {
         setAnimatedLine(true);
       }, 100);
@@ -48,7 +44,6 @@ const MarginRatioChart: React.FC = () => {
     loadData();
   }, []);
 
-  // Update displayed data when time range changes
   useEffect(() => {
     if (allData.length === 0) return;
     
@@ -57,7 +52,6 @@ const MarginRatioChart: React.FC = () => {
     setDisplayData(slicedData);
   }, [timeRange, allData]);
 
-  // Handle mouse move on chart to show hover line
   const handleMouseMove = (event: React.MouseEvent) => {
     if (!chartContainerRef.current || loading || displayData.length === 0) return;
     
@@ -65,7 +59,6 @@ const MarginRatioChart: React.FC = () => {
     const mouseX = event.clientX - chartRect.left;
     const chartWidth = chartRect.width;
     
-    // Calculate index based on mouse position
     const dataLength = displayData.length;
     const index = Math.min(
       Math.max(0, Math.floor((mouseX / chartWidth) * dataLength)),
@@ -75,12 +68,10 @@ const MarginRatioChart: React.FC = () => {
     setHoverIndex(index);
   };
 
-  // Clear hover line when mouse leaves
   const handleMouseLeave = () => {
     setHoverIndex(null);
   };
 
-  // Custom date formatter for X-axis
   const formatXAxis = (dateString: string) => {
     if (!dateString) return "";
     const date = new Date(dateString);
@@ -90,26 +81,14 @@ const MarginRatioChart: React.FC = () => {
     });
   };
 
-  // Custom percent formatter for Y-axis
   const formatYAxis = (value: number) => {
     return `${value.toFixed(1)}%`;
   };
 
-  // Handle time range change
   const handleRangeChange = (range: [number, number]) => {
     setTimeRange(range);
   };
-  
-  // Handle tooltip placement
-  const getTooltipPosition = (coords: { x: number, y: number }) => {
-    const adjustedX = coords.x - 100; // Account for tooltip width
-    return {
-      x: adjustedX < 0 ? 0 : adjustedX,
-      y: coords.y - 120 // Show above the cursor
-    }
-  };
 
-  // Calculate statistics
   const calculateStats = () => {
     if (displayData.length === 0) return { avg: 0, min: 0, max: 0 };
     
@@ -120,7 +99,7 @@ const MarginRatioChart: React.FC = () => {
     
     return { avg, min, max };
   };
-  
+
   const { avg, min, max } = calculateStats();
 
   return (
@@ -202,7 +181,6 @@ const MarginRatioChart: React.FC = () => {
                   />
                   <Tooltip 
                     content={<ChartTooltip data={displayData} />}
-                    position={getTooltipPosition}
                     cursor={false}
                   />
                   <ReferenceLine 
