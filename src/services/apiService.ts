@@ -24,7 +24,7 @@ interface ApiResponse {
  */
 export const fetchMarginRatioData = async (days: number = 200): Promise<MarginRatioDataPoint[]> => {
   try {
-    const response = await fetch("http://dq.10jqka.com.cn/fuyao/rzrq_data/default/v1/fetch_data", {
+    const response = await fetch("https://dq.10jqka.com.cn/fuyao/rzrq_data/default/v1/fetch_data", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
