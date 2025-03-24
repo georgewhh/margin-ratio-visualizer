@@ -37,9 +37,9 @@ export const fetchMarginRatioData = async (): Promise<MarginRatioDataPoint[]> =>
     const now = new Date();
     const endTimestamp = Math.floor(now.getTime() / 1000); // Convert to seconds timestamp
     
-    // For start timestamp, use a very early date to get all historical data
-    // Using timestamp from 2010-01-01 to ensure we get all available data
-    const startTimestamp = 1262304000; // 2010-01-01 00:00:00 UTC
+    // Use January 5, 2024 as the earliest date
+    const startDate = new Date('2024-01-05T00:00:00Z');
+    const startTimestamp = Math.floor(startDate.getTime() / 1000);
     
     const response = await fetch("https://dataq.10jqka.com.cn/fetch-data-server/fetch/v1/interval_data", {
       method: "POST",
