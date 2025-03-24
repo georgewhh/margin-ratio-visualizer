@@ -27,22 +27,21 @@ interface ApiResponse {
  */
 export const fetchMarginRatioData = async (days: number = 200): Promise<MarginRatioDataPoint[]> => {
   try {
-    // Get current date in YYYYMMDD format for the 'end' parameter
+    // Get current date and convert to timestamp for the 'end' parameter
     const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    const endDate = `${year}${month}${day}`;
+    const timestamp = Math.floor(now.getTime() / 1000); // Convert to seconds timestamp
     
     const response = await fetch("https://dataq.10jqka.com.cn/fetch-data-server/fetch/v1/interval_data", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "platform": "hevo",
+        "Source-Id": "PC"
       },
       body: JSON.stringify({
         time_range: {
           time_type: "TRADE_DAILY",
-          end: endDate,
+          end: timestamp.toString(),
           offset: `-${days}`
         },
         indexes: [
