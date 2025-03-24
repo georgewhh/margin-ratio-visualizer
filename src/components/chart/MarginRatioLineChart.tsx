@@ -27,10 +27,7 @@ const MarginRatioLineChart: React.FC<MarginRatioLineChartProps> = ({
   const formatXAxis = (dateString: string) => {
     if (!dateString) return "";
     const date = new Date(dateString);
-    return date.toLocaleDateString("zh-CN", {
-      month: "numeric",
-      day: "numeric",
-    });
+    return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`;
   };
 
   const formatYAxis = (value: number) => {

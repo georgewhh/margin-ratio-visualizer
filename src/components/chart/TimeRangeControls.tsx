@@ -17,10 +17,7 @@ const TimeRangeControls: React.FC<TimeRangeControlsProps> = ({
   const formatDate = (dateString: string | undefined) => {
     if (!dateString) return "";
     const date = new Date(dateString);
-    return date.toLocaleDateString("zh-CN", {
-      month: "numeric",
-      day: "numeric",
-    });
+    return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`;
   };
 
   return (

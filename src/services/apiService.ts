@@ -9,15 +9,22 @@ export interface MarginRatioDataPoint {
 
 interface ApiResponse {
   data: {
-    items: Array<{
-      item: {
-        "48:883957": {
-          rzrq_margin_trading_bal_flow_value_rate: number;
-        };
-      };
-      trade_date: string;
+    indexes: Array<{
+      index_id: string;
+      attribute: Record<string, any>;
+      value_type: string;
     }>;
+    data: Array<{
+      code: string;
+      values: Array<{
+        idx: number;
+        values: number[];
+      }>;
+    }>;
+    time_range: string[]; // Array of timestamps
   };
+  status_code: number;
+  status_msg: string;
 }
 
 /**
@@ -67,12 +74,23 @@ export const fetchMarginRatioData = async (days: number = 200): Promise<MarginRa
 
     const result = await response.json() as ApiResponse;
     
-    // Transform the API response to our data format
-    const transformedData = result.data.items.map(item => ({
-      date: formatTradeDate(item.trade_date),
-      value: Number(item.item["48:883957"].rzrq_margin_trading_bal_flow_value_rate),
-      securityName: "融资融券余额占流通市值比" // Since we don't get security name from the new API
-    })).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    // Check if we got a successful response
+    if (result.status_code !== 0 || !result.data || !result.data.data || !result.data.time_range) {
+      throw new Error(`API returned error: ${result.status_msg}`);
+    }
+    
+    // Get the timestamps array and values array
+    const timestamps = result.data.time_range;
+    const valuesArray = result.data.data[0]?.values[0]?.values || [];
+    
+    // Transform the API response to our data format by pairing timestamps with values
+    const transformedData = timestamps.map((timestamp, index) => {
+      return {
+        date: formatTimestampToDate(timestamp),
+        value: valuesArray[index] || 0,
+        securityName: "融资融券余额占流通市值比"
+      };
+    }).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     
     return transformedData;
   } catch (error) {
@@ -89,16 +107,16 @@ export const fetchMarginRatioData = async (days: number = 200): Promise<MarginRa
 };
 
 /**
- * Formats trade date from YYYYMMDD to YYYY-MM-DD format
- * @param tradeDate Trade date in YYYYMMDD format
+ * Formats Unix timestamp to YYYY-MM-DD format
+ * @param timestamp Unix timestamp in seconds
  * @returns Formatted date string in YYYY-MM-DD format
  */
-const formatTradeDate = (tradeDate: string): string => {
-  if (tradeDate.length !== 8) return tradeDate;
+const formatTimestampToDate = (timestamp: string): string => {
+  const date = new Date(parseInt(timestamp) * 1000); // Convert to milliseconds
   
-  const year = tradeDate.substring(0, 4);
-  const month = tradeDate.substring(4, 6);
-  const day = tradeDate.substring(6, 8);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
   
   return `${year}-${month}-${day}`;
 };
