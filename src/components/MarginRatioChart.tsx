@@ -19,11 +19,12 @@ const MarginRatioChart: React.FC = () => {
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
-      const data = await fetchMarginRatioData(200);
+      const data = await fetchMarginRatioData();
       setAllData(data);
       
       const dataLength = data.length;
-      const initialStart = Math.max(0, dataLength - 30);
+      // Initially show the most recent 200 days (or all if less than 200)
+      const initialStart = Math.max(0, dataLength - 200);
       const initialEnd = dataLength - 1;
       
       setTimeRange([initialStart, initialEnd]);
