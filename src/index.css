@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -167,10 +166,20 @@
 
 .range-selector-handle {
   @apply absolute top-0 bottom-0 w-2 bg-muted-foreground/60 hover:bg-muted-foreground cursor-col-resize transition-colors duration-200;
+  z-index: 10;
+}
+
+.left-handle {
+  @apply rounded-l-lg;
+}
+
+.right-handle {
+  @apply rounded-r-lg;
 }
 
 .range-selector-selected {
-  @apply absolute top-0 bottom-0 bg-muted-foreground/20 pointer-events-none;
+  @apply absolute top-0 bottom-0 bg-muted-foreground/20 cursor-grab active:cursor-grabbing;
+  z-index: 5;
 }
 
 /* Glass effect components */

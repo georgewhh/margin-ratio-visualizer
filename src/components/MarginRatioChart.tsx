@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import {
   LineChart,
@@ -31,9 +30,12 @@ const MarginRatioChart: React.FC = () => {
       const data = await fetchMarginRatioData(200);
       setAllData(data);
       
-      const initialRange: [number, number] = [0, data.length - 1];
-      setTimeRange(initialRange);
-      setDisplayData(data);
+      const dataLength = data.length;
+      const initialStart = Math.max(0, dataLength - 30);
+      const initialEnd = dataLength - 1;
+      
+      setTimeRange([initialStart, initialEnd]);
+      setDisplayData(data.slice(initialStart, initialEnd + 1));
       
       setLoading(false);
       
@@ -222,7 +224,7 @@ const MarginRatioChart: React.FC = () => {
               </ResponsiveContainer>
             </div>
             
-            <div className="pt-2">
+            <div className="pt-4">
               <TimeRangeSelector
                 min={0}
                 max={allData.length - 1}
@@ -234,7 +236,7 @@ const MarginRatioChart: React.FC = () => {
                 <span>{allData[timeRange[1]]?.date ? formatXAxis(allData[timeRange[1]].date) : ""}</span>
               </div>
               <div className="text-xs text-center mt-2 text-muted-foreground">
-                拖动时间轴调整查看范围
+                拖动两侧手柄或中间区域调整查看范围
               </div>
             </div>
           </>

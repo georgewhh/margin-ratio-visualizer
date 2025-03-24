@@ -122,12 +122,12 @@ const TimeRangeSelector: React.FC<TimeRangeSelectorProps> = ({
         onMouseDown={(e) => handleMouseDown(e, "middle")}
       />
       <div
-        className="range-selector-handle left-0"
+        className="range-selector-handle left-handle"
         style={{ left: `${startPos}%` }}
         onMouseDown={(e) => handleMouseDown(e, "left")}
       />
       <div
-        className="range-selector-handle right-0"
+        className="range-selector-handle right-handle"
         style={{ left: `${endPos}%` }}
         onMouseDown={(e) => handleMouseDown(e, "right")}
       />
