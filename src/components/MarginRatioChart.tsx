@@ -14,6 +14,8 @@ const MarginRatioChart: React.FC = () => {
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
   const [timeRange, setTimeRange] = useState<[number, number]>([0, 0]);
   const [animatedLine, setAnimatedLine] = useState<boolean>(false);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [startTouchX, setStartTouchX] = useState<number>(0);
   const chartContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -48,6 +50,7 @@ const MarginRatioChart: React.FC = () => {
     setDisplayData(slicedData);
   }, [timeRange, allData]);
 
+  // Handle mouse events for desktop
   const handleMouseMove = (event: React.MouseEvent) => {
     if (!chartContainerRef.current || loading || displayData.length === 0) return;
     
@@ -66,6 +69,46 @@ const MarginRatioChart: React.FC = () => {
 
   const handleMouseLeave = () => {
     setHoverIndex(null);
+  };
+
+  // Handle touch events for mobile
+  const handleTouchStart = (event: React.TouchEvent) => {
+    if (!chartContainerRef.current || loading || displayData.length === 0) return;
+    
+    setStartTouchX(event.touches[0].clientX);
+    setIsDragging(true);
+
+    const chartRect = chartContainerRef.current.getBoundingClientRect();
+    const touchX = event.touches[0].clientX - chartRect.left;
+    const chartWidth = chartRect.width;
+    
+    const dataLength = displayData.length;
+    const index = Math.min(
+      Math.max(0, Math.floor((touchX / chartWidth) * dataLength)),
+      dataLength - 1
+    );
+    
+    setHoverIndex(index);
+  };
+
+  const handleTouchMove = (event: React.TouchEvent) => {
+    if (!isDragging || !chartContainerRef.current) return;
+    
+    const chartRect = chartContainerRef.current.getBoundingClientRect();
+    const touchX = event.touches[0].clientX - chartRect.left;
+    const chartWidth = chartRect.width;
+    
+    const dataLength = displayData.length;
+    const index = Math.min(
+      Math.max(0, Math.floor((touchX / chartWidth) * dataLength)),
+      dataLength - 1
+    );
+    
+    setHoverIndex(index);
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
   };
 
   const handleRangeChange = (range: [number, number]) => {
@@ -101,9 +144,12 @@ const MarginRatioChart: React.FC = () => {
           <>
             <div 
               ref={chartContainerRef}
-              className="relative h-[300px] w-full"
+              className="relative h-[300px] w-full md:h-[400px] touch-manipulation"
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
             >
               {hoverIndex !== null && (
                 <div 

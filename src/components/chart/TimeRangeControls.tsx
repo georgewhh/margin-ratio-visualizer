@@ -32,9 +32,6 @@ const TimeRangeControls: React.FC<TimeRangeControlsProps> = ({
         <span>{formatDate(allData[timeRange[0]]?.date)}</span>
         <span>{formatDate(allData[timeRange[1]]?.date)}</span>
       </div>
-      <div className="text-xs text-center mt-2 text-muted-foreground">
-        拖动两侧手柄或中间区域调整查看范围
-      </div>
     </div>
   );
 };
