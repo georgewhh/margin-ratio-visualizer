@@ -127,10 +127,10 @@ const MarginRatioChart: React.FC = () => {
     <Card className="w-full h-full border-none bg-transparent animate-scale-in">
       <CardHeader className="pb-2">
         <div className="flex flex-col space-y-1">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <CardTitle className="text-2xl font-semibold">两融余额占流通市值比</CardTitle>
             <ChartStats data={displayData} loading={loading} />
           </div>
-          <CardTitle className="text-2xl font-semibold">两融余额占流通市值比</CardTitle>
         </div>
       </CardHeader>
       <CardContent>
