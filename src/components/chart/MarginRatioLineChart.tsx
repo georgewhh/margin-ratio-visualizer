@@ -38,7 +38,7 @@ const MarginRatioLineChart: React.FC<MarginRatioLineChartProps> = ({
     <ResponsiveContainer width="100%" height="100%">
       <LineChart
         data={data}
-        margin={{ top: 10, right: 10, left: 10, bottom: 0 }}
+        margin={{ top: 10, right: 5, left: 5, bottom: 0 }}
       >
         <defs>
           <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
@@ -50,19 +50,21 @@ const MarginRatioLineChart: React.FC<MarginRatioLineChartProps> = ({
         <XAxis 
           dataKey="date" 
           tickFormatter={formatXAxis} 
-          tickMargin={10}
-          minTickGap={50}
-          tick={{ fontSize: 12 }}
+          tickMargin={5}
+          minTickGap={30}
+          tick={{ fontSize: 10 }}
           axisLine={{ stroke: 'var(--border)' }}
           tickLine={{ stroke: 'var(--border)' }}
+          height={20}
         />
         <YAxis 
           tickFormatter={formatYAxis} 
-          tickMargin={10}
+          tickMargin={5}
           domain={['auto', 'auto']}
-          tick={{ fontSize: 12 }}
+          tick={{ fontSize: 10 }}
           axisLine={{ stroke: 'var(--border)' }}
           tickLine={{ stroke: 'var(--border)' }}
+          width={30}
         />
         <Tooltip 
           content={<ChartTooltip data={data} />}
@@ -75,13 +77,13 @@ const MarginRatioLineChart: React.FC<MarginRatioLineChartProps> = ({
           strokeWidth={1}
         >
           <text
-            x={60}
-            y={-5}
+            x={30}
+            y={-2}
             fill="var(--muted-foreground)"
             textAnchor="middle"
-            fontSize={10}
+            fontSize={8}
           >
-            平均值: {avg.toFixed(2)}%
+            平均: {avg.toFixed(2)}%
           </text>
         </ReferenceLine>
         <Line
@@ -91,7 +93,7 @@ const MarginRatioLineChart: React.FC<MarginRatioLineChartProps> = ({
           strokeWidth={2}
           dot={false}
           activeDot={{ 
-            r: 6, 
+            r: 4, 
             stroke: "#F0BE83", 
             strokeWidth: 2,
             fill: "var(--card)"

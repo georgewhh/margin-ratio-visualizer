@@ -24,16 +24,16 @@ const ChartStats: React.FC<ChartStatsProps> = ({ data, loading }) => {
   if (loading) return null;
 
   return (
-    <div className="flex items-center space-x-4 text-sm">
-      <div className="flex items-center space-x-1">
+    <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm">
+      <div className="flex items-center gap-1">
         <span className="text-muted-foreground">均值:</span>
         <span className="font-medium">{avg.toFixed(2)}%</span>
       </div>
-      <div className="flex items-center space-x-1">
+      <div className="flex items-center gap-1">
         <span className="text-muted-foreground">最小值:</span>
         <span className="font-medium">{min.toFixed(2)}%</span>
       </div>
-      <div className="flex items-center space-x-1">
+      <div className="flex items-center gap-1">
         <span className="text-muted-foreground">最大值:</span>
         <span className="font-medium">{max.toFixed(2)}%</span>
       </div>

@@ -125,15 +125,15 @@ const MarginRatioChart: React.FC = () => {
 
   return (
     <Card className="w-full h-full border-none bg-transparent animate-scale-in">
-      <CardHeader className="pb-2">
+      <CardHeader className="pb-2 px-3 sm:px-4">
         <div className="flex flex-col space-y-1">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <CardTitle className="text-2xl font-semibold">两融余额占流通市值比</CardTitle>
+            <CardTitle className="text-xl sm:text-2xl font-semibold">两融余额占流通市值比</CardTitle>
             <ChartStats data={displayData} loading={loading} />
           </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-3 sm:p-4 pt-0">
         {loading ? (
           <div className="space-y-2">
             <Skeleton className="h-[300px] w-full rounded-lg" />
@@ -143,7 +143,7 @@ const MarginRatioChart: React.FC = () => {
           <>
             <div 
               ref={chartContainerRef}
-              className="relative h-[300px] w-full md:h-[400px] touch-manipulation"
+              className="relative h-[200px] sm:h-[250px] md:h-[300px] lg:h-[350px] w-full touch-manipulation"
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
               onTouchStart={handleTouchStart}

@@ -21,7 +21,7 @@ const TimeRangeControls: React.FC<TimeRangeControlsProps> = ({
   };
 
   return (
-    <div className="pt-4">
+    <div className="pt-2 sm:pt-3">
       <TimeRangeSelector
         min={0}
         max={allData.length - 1}
